@@ -1,3 +1,11 @@
+import Header from './components/Header';
+import SearchForm from './components/SearchForm';
+
 export default function Home() {
-  return <div></div>;
+  return (
+    <div className="p-[50px]">
+      <Header />
+      <SearchForm />
+    </div>
+  );
 }
