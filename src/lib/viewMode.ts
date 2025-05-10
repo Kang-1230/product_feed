@@ -40,10 +40,16 @@ export default function useViewMode() {
   };
 
   useEffect(() => {
-    const randomViewMode = Math.random() < 0.5 ? 'list' : 'grid';
-    setViewMode(randomViewMode);
+    const savedViewMode = storage.get<ViewMode>('viewMode');
 
-    storage.set('viewMode', randomViewMode);
+    if (savedViewMode) {
+      setViewMode(savedViewMode);
+    } else {
+      const randomViewMode = Math.random() < 0.5 ? 'list' : 'grid';
+      setViewMode(randomViewMode);
+
+      storage.set('viewMode', randomViewMode);
+    }
   }, []);
 
   return viewMode;
