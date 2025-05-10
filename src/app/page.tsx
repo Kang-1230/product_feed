@@ -1,5 +1,5 @@
 import Header from './components/Header';
-import ProductList from './components/ProductList';
+import ProductSection from './components/ProductSection';
 import SearchForm from './components/SearchForm';
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
       <section className="max-w-[1440px]  flex-col flex items-center">
         <Header />
         <SearchForm />
-        <ProductList />
+        <ProductSection />
       </section>
     </div>
   );
