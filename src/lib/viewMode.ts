@@ -1,11 +1,5 @@
+import { StorageData, ViewMode } from '@/types/viewMode';
 import { useEffect, useState } from 'react';
-
-type ViewMode = 'list' | 'grid';
-
-type StorageData<T> = {
-  value: T;
-  expire: number;
-};
 
 export default function useViewMode() {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
