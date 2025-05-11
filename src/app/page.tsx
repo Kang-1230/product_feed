@@ -1,3 +1,15 @@
+import Header from './components/Header';
+import ProductSection from './components/ProductSection';
+import SearchForm from './components/SearchForm';
+
 export default function Home() {
-  return <div></div>;
+  return (
+    <div className=" py-[32px] flex flex-col justify-center items-center  ">
+      <section className="max-w-[1440px]  flex-col flex items-center">
+        <Header />
+        <SearchForm />
+        <ProductSection />
+      </section>
+    </div>
+  );
 }
