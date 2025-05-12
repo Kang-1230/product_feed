@@ -9,9 +9,9 @@ export async function getProducts() {
 }
 
 export async function fetchSearchProducts({ q }: { q: string }) {
-  const data = await fetch(`https://dummyjson.com/products/search?q=${q}`)
-    .then((res) => res.json())
-    .then(console.log);
+  const data = await fetch(`https://dummyjson.com/products/search?q=${q}`).then(
+    (res) => res.json()
+  );
 
   console.log('Search API 응답:', data);
 

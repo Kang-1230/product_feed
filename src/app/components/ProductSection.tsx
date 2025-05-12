@@ -5,14 +5,28 @@ import ProductListCard from './ProductListCard';
 import { useProducts } from '@/hooks/useProducts';
 import ProductGridCard from './ProductGridCard';
 import useViewMode from '@/lib/viewMode';
+import { useSearchParams } from 'next/navigation';
+import { useSearchProducts } from '@/hooks/useSearchProducts';
 
 export default function ProductSection() {
-  const { data, isLoading, error } = useProducts();
+  const searchParams = useSearchParams();
+  const q = searchParams.get('q') ?? '';
+  // const sort = searchParams.get('sort') ?? 'default';
   const viewMode = useViewMode();
 
-  if (isLoading) return <div>ProductSection 로딩 중...</div>;
-  if (error) return <div>useProducts 에러 발생</div>;
+  const {
+    data: searchData,
+    isLoading: isSearchDataLoading,
+    error: searchDataError,
+  } = useSearchProducts(q);
+  const { data, isLoading, error } = useProducts();
+
+  if (isLoading || isSearchDataLoading)
+    return <div>ProductSection 로딩 중...</div>;
+  if (error || searchDataError) return <div>useProducts 에러 발생</div>;
   console.log('카드로 데이터 불러오기', data);
+
+  const productList = q ? searchData.products : data.products;
 
   return (
     <div
@@ -22,7 +36,7 @@ export default function ProductSection() {
           : 'grid grid-cols-4 gap-[32px]'
       }
     >
-      {data.products.map((item: Product) =>
+      {productList.map((item: Product) =>
         viewMode === 'list' ? (
           <ProductListCard item={item} key={item.id} />
         ) : (
