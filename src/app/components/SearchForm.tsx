@@ -12,11 +12,9 @@ export default function SearchForm() {
     e.preventDefault();
 
     const q = e.target.q.value;
-    console.log('q', q);
 
     const params = new URLSearchParams();
     if (q) params.set('q', q);
-    console.log('params', params);
 
     router.push(`?${params.toString()}`);
   };
@@ -24,7 +22,7 @@ export default function SearchForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-[844px] h-[75px] shadow-lg shadow-gray-200 rounded-full items-center mt-[30px] mb-[22px] "
+      className="flex w-[844px] h-[75px] shadow-lg shadow-gray-200 rounded-full items-center mt-[30px] mb-[4px] "
     >
       <div className="flex items-center h-[24px] ml-[36px]">
         <Image

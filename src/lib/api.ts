@@ -17,3 +17,13 @@ export async function fetchSearchProducts({ q }: { q: string }) {
 
   return data;
 }
+
+export async function fetchSortProducts() {
+  const data = await fetch(
+    `https://dummyjson.com/products?sortBy=rating&order=desc`
+  ).then((res) => res.json());
+
+  console.log('Sort API 응답:', data);
+
+  return data;
+}

@@ -7,26 +7,49 @@ import ProductGridCard from './ProductGridCard';
 import useViewMode from '@/lib/viewMode';
 import { useSearchParams } from 'next/navigation';
 import { useSearchProducts } from '@/hooks/useSearchProducts';
+import { useSortProducts } from '@/hooks/useSortProducts';
 
 export default function ProductSection() {
   const searchParams = useSearchParams();
   const q = searchParams.get('q') ?? '';
-  // const sort = searchParams.get('sort') ?? 'default';
+  const sort = searchParams.get('sort') ?? 'default';
   const viewMode = useViewMode();
+
+  const isSorted = !q && sort === 'rating';
 
   const {
     data: searchData,
     isLoading: isSearchDataLoading,
     error: searchDataError,
   } = useSearchProducts(q);
+  const {
+    data: sortedData,
+    isLoading: isSortedLoading,
+    error: sortedError,
+  } = useSortProducts();
   const { data, isLoading, error } = useProducts();
 
-  if (isLoading || isSearchDataLoading)
+  if (isLoading || isSearchDataLoading || isSortedLoading)
     return <div>ProductSection 로딩 중...</div>;
-  if (error || searchDataError) return <div>useProducts 에러 발생</div>;
+  if (error || searchDataError || sortedError)
+    return <div>useProducts 에러 발생</div>;
   console.log('카드로 데이터 불러오기', data);
 
-  const productList = q ? searchData.products : data.products;
+  console.log('isSorted', isSorted);
+
+  let productList: Product[] = [];
+
+  if (q) {
+    productList = searchData?.products ?? [];
+  } else if (isSorted) {
+    productList = sortedData?.products ?? [];
+  } else {
+    productList = data?.products ?? [];
+  }
+
+  if (productList.length === 0) {
+    return <div>일치하는 결과가 없습니다.</div>;
+  }
 
   return (
     <div
