@@ -7,11 +7,12 @@ export default function SearchForm() {
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('handlesubmit 작동', e);
-
     e.preventDefault();
 
-    const q = e.target.q.value;
+    const formData = new FormData(e.currentTarget);
+    const q = formData.get('q')?.toString() ?? '';
+
+    console.log('q', q);
 
     const params = new URLSearchParams();
     if (q) params.set('q', q);
