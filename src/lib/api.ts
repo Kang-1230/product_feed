@@ -7,3 +7,23 @@ export async function getProducts() {
 
   return data;
 }
+
+export async function fetchSearchProducts({ q }: { q: string }) {
+  const data = await fetch(`https://dummyjson.com/products/search?q=${q}`).then(
+    (res) => res.json()
+  );
+
+  console.log('Search API 응답:', data);
+
+  return data;
+}
+
+export async function fetchSortProducts() {
+  const data = await fetch(
+    `https://dummyjson.com/products?sortBy=rating&order=desc`
+  ).then((res) => res.json());
+
+  console.log('Sort API 응답:', data);
+
+  return data;
+}
