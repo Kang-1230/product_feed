@@ -1,13 +1,14 @@
 'use client';
 
 import { Product } from '@/types/product';
-import ProductListCard from './ProductListCard';
-import ProductGridCard from './ProductGridCard';
 import useViewMode from '@/lib/viewMode';
 import { useSearchParams } from 'next/navigation';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchSearchProducts, fetchSortProducts, getProducts } from '@/lib/api';
+import ProductListCard from './ProductListCard';
+import ProductGridCard from './ProductGridCard';
 import InfiniteScrollTrigger from './InfiniteScrollTrigger';
+import ProductListSkeleton from './ProductListSkeleton';
 
 export default function ProductSection() {
   const searchParams = useSearchParams();
@@ -51,6 +52,11 @@ export default function ProductSection() {
 
   if (isLoading) {
     console.log('데이터 로딩중');
+    return viewMode === 'list' ? (
+      <ProductListSkeleton />
+    ) : (
+      <div>그리드 데이터 로딩중</div>
+    );
   }
   if (error) {
     return console.log('데이터 error', error);
