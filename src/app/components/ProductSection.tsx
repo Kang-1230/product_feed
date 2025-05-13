@@ -9,6 +9,7 @@ import ProductListCard from './ProductListCard';
 import ProductGridCard from './ProductGridCard';
 import InfiniteScrollTrigger from './InfiniteScrollTrigger';
 import ProductListSkeleton from './ProductListSkeleton';
+import ProductGridSkeleton from './ProductGridSkeleton';
 
 export default function ProductSection() {
   const searchParams = useSearchParams();
@@ -50,16 +51,18 @@ export default function ProductSection() {
     },
   });
 
+  if (viewMode === 'loading') return null;
+
   if (isLoading) {
     console.log('데이터 로딩중');
     return viewMode === 'list' ? (
       <ProductListSkeleton />
     ) : (
-      <div>그리드 데이터 로딩중</div>
+      <ProductGridSkeleton />
     );
   }
   if (error) {
-    return console.log('데이터 error', error);
+    return <div>에러가 발생했습니다.</div>;
   }
 
   if (!data) {

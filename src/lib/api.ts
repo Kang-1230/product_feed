@@ -4,7 +4,6 @@ export async function getProducts({ pageParam = 0 }) {
   ).then((res) => res.json());
 
   console.log('API 응답:', data);
-
   return data;
 }
 
