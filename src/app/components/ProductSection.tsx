@@ -2,12 +2,12 @@
 
 import { Product } from '@/types/product';
 import ProductListCard from './ProductListCard';
-import { useProducts } from '@/hooks/useProducts';
 import ProductGridCard from './ProductGridCard';
 import useViewMode from '@/lib/viewMode';
 import { useSearchParams } from 'next/navigation';
-import { useSearchProducts } from '@/hooks/useSearchProducts';
-import { useSortProducts } from '@/hooks/useSortProducts';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { fetchSearchProducts, fetchSortProducts, getProducts } from '@/lib/api';
+import InfiniteScrollTrigger from './InfiniteScrollTrigger';
 
 export default function ProductSection() {
   const searchParams = useSearchParams();
@@ -17,39 +17,50 @@ export default function ProductSection() {
 
   const isSorted = !q && sort === 'rating';
 
-  const {
-    data: searchData,
-    isLoading: isSearchDataLoading,
-    error: searchDataError,
-  } = useSearchProducts(q);
-  const {
-    data: sortedData,
-    isLoading: isSortedLoading,
-    error: sortedError,
-  } = useSortProducts();
-  const { data, isLoading, error } = useProducts();
-
-  if (isLoading || isSearchDataLoading || isSortedLoading)
-    return <div>ProductSection 로딩 중...</div>;
-  if (error || searchDataError || sortedError)
-    return <div>useProducts 에러 발생</div>;
-  console.log('카드로 데이터 불러오기', data);
-
-  console.log('isSorted', isSorted);
-
-  let productList: Product[] = [];
+  let queryFn;
+  let queryKey;
 
   if (q) {
-    productList = searchData?.products ?? [];
+    queryFn = ({ pageParam = 0 }) => fetchSearchProducts({ q, pageParam });
+    queryKey = ['products', 'search', q];
   } else if (isSorted) {
-    productList = sortedData?.products ?? [];
+    queryFn = ({ pageParam = 0 }) => fetchSortProducts({ pageParam });
+    queryKey = ['products', 'sort', 'rating'];
   } else {
-    productList = data?.products ?? [];
+    queryFn = ({ pageParam = 0 }) => getProducts({ pageParam });
+    queryKey = ['products'];
   }
 
-  if (productList.length === 0) {
-    return <div>일치하는 결과가 없습니다.</div>;
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+  } = useInfiniteQuery({
+    queryKey,
+    queryFn,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      const total = lastPage.total;
+      const loaded = allPages.length * 20;
+      return loaded < total ? loaded : undefined;
+    },
+  });
+
+  if (isLoading) {
+    console.log('데이터 로딩중');
   }
+  if (error) {
+    return console.log('데이터 error', error);
+  }
+
+  if (!data) {
+    return console.log('데이터 없음');
+  }
+
+  const productList: Product[] = data?.pages.flatMap((page) => page.products);
 
   return (
     <div
@@ -66,6 +77,11 @@ export default function ProductSection() {
           <ProductGridCard item={item} key={item.id} />
         )
       )}
+      <InfiniteScrollTrigger
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+      />
     </div>
   );
 }
