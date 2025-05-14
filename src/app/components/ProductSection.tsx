@@ -54,7 +54,6 @@ export default function ProductSection() {
   if (viewMode === 'loading') return null;
 
   if (isLoading) {
-    console.log('데이터 로딩중');
     return viewMode === 'list' ? (
       <ProductListSkeleton />
     ) : (
@@ -66,7 +65,8 @@ export default function ProductSection() {
   }
 
   if (!data) {
-    return console.log('데이터 없음');
+    console.log('데이터 없음');
+    return null;
   }
 
   const productList: Product[] = data?.pages.flatMap((page) => page.products);

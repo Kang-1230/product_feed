@@ -12,8 +12,6 @@ export default function SearchForm() {
     const formData = new FormData(e.currentTarget);
     const q = formData.get('q')?.toString() ?? '';
 
-    console.log('q', q);
-
     const params = new URLSearchParams();
     if (q) params.set('q', q);
 
