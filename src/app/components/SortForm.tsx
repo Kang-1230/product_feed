@@ -5,7 +5,6 @@ export default function SortForm() {
   const searchParams = useSearchParams();
   const search = searchParams.get('q');
 
-  console.log('search', search);
   const router = useRouter();
 
   if (search) return null;

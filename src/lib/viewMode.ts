@@ -2,7 +2,7 @@ import { StorageData, ViewMode } from '@/types/viewMode';
 import { useEffect, useState } from 'react';
 
 export default function useViewMode() {
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
+  const [viewMode, setViewMode] = useState<ViewMode | 'loading'>('loading');
   const storage = {
     set<T>(key: string, value: T, expireSec = 60 * 60 * 24) {
       const data: StorageData<T> = {
