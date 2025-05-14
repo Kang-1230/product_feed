@@ -71,26 +71,41 @@ export default function ProductSection() {
 
   const productList: Product[] = data?.pages.flatMap((page) => page.products);
 
+  let footerMessage = null;
+
+  if (!hasNextPage && productList.length !== 0) {
+    footerMessage = '더 이상 불러올 수 없습니다.';
+  } else if (!hasNextPage && productList.length === 0) {
+    footerMessage = '일치하는 결과가 없습니다.';
+  }
+
   return (
-    <div
-      className={
-        viewMode === 'list'
-          ? 'flex flex-col gap-[24px]'
-          : 'grid grid-cols-4 gap-[32px]'
-      }
-    >
-      {productList.map((item: Product) =>
-        viewMode === 'list' ? (
-          <ProductListCard item={item} key={item.id} />
-        ) : (
-          <ProductGridCard item={item} key={item.id} />
-        )
+    <div>
+      <div
+        className={
+          viewMode === 'list'
+            ? 'flex flex-col gap-[24px]'
+            : 'grid grid-cols-4 gap-[32px]'
+        }
+      >
+        {productList.map((item: Product) =>
+          viewMode === 'list' ? (
+            <ProductListCard item={item} key={item.id} />
+          ) : (
+            <ProductGridCard item={item} key={item.id} />
+          )
+        )}
+        <InfiniteScrollTrigger
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+        />
+      </div>
+      {footerMessage && (
+        <div className="flex items-center justify-center h-[120px] text-gray-500">
+          {footerMessage}
+        </div>
       )}
-      <InfiniteScrollTrigger
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-      />
     </div>
   );
 }
