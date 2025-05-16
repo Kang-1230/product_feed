@@ -74,13 +74,14 @@ src
 - 검색 시 별점순 버튼 사라짐
 - 검색 결과 없을 시 '일치하는 결과가 없습니다'문구 표시
 
-![Image](https://github.com/user-attachments/assets/b38c96a2-4cb0-4763-9f38-894f7e90f8a4)
+![Image](https://github.com/user-attachments/assets/9069fea6-aa5b-4f3c-ad57-7d121ca39995)
 
 - 무한 스크롤 구현, 검색/정렬시에도 동일하게 적용
 -페이지 하단 도달 시 다음 20개의 아이템 자동으로 로드
 - 마지막 데이터 로드 시 '더 이상 불러올 수 없습니다'문구 표시
 
-![Image](https://github.com/user-attachments/assets/9069fea6-aa5b-4f3c-ad57-7d121ca39995)
+![Image](https://github.com/user-attachments/assets/b38c96a2-4cb0-4763-9f38-894f7e90f8a4)
+
 
 ## 🔧 기술 구현 상세 
 
